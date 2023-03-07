@@ -11,44 +11,67 @@ namespace LinqExercise
 
         static void Main(string[] args)
         {
-            /*
-             * 
-             * Complete every task using Method OR Query syntax. 
-             * You may find that Method syntax is easier to use since it is most like C#
-             * Every one of these can be completed using Linq and then printing with a foreach loop.
-             * Push to your github when completed!
-             * 
-             */
-
-            //TODO: Print the Sum of numbers
-
-            //TODO: Print the Average of numbers
-
-            //TODO: Order numbers in ascending order and print to the console
-
-            //TODO: Order numbers in decsending order and print to the console
-
-            //TODO: Print to the console only the numbers greater than 6
-
-            //TODO: Order numbers in any order (acsending or desc) but only print 4 of them **foreach loop only!**
-
-            //TODO: Change the value at index 4 to your age, then print the numbers in decsending order
+            Console.WriteLine($"Sum is = {numbers.Sum()}");
+            Console.WriteLine($"Average is = {numbers.Average()}");
+            var numbersOrder = numbers.OrderBy(num => num);
+            foreach (var numb in numbersOrder) 
+            {
+                Console.WriteLine(numb);
+            }
+           var numbersOrderDes = numbers.OrderByDescending(num => num);
+            foreach (var numb in numbersOrderDes)
+            {
+                Console.WriteLine(numb); 
+            }
+           var numbersOverSix = numbers.Where(num => num > 6);
+            foreach (var numb in numbersOverSix)
+            {
+                Console.WriteLine(numb);
+            }
+            var onlyFour = numbers.Take(4);
+            foreach (var numb in onlyFour)
+            {
+                Console.WriteLine(numb);
+            }
+            numbers[4] = 27;
+            foreach (var numb in numbersOrderDes)
+            {
+                Console.WriteLine(numb);
+            }                       
 
             // List of employees ****Do not remove this****
             var employees = CreateEmployees();
 
-            //TODO: Print all the employees' FullName properties to the console only if their FirstName starts with a C OR an S and order this in ascending order by FirstName.
+            var nameStartCOrS = employees.Where(name => name.FirstName.ToUpper().StartsWith("C") || name.FirstName.ToUpper().StartsWith("S"));
+            
+                //TODO: Print all the employees' FullName properties to the console only if their FirstName starts with a C OR an S and order this in ascending order by FirstName.
 
             //TODO: Print all the employees' FullName and Age who are over the age 26 to the console and order this by Age first and then by FirstName in the same result.
 
             //TODO: Print the Sum and then the Average of the employees' YearsOfExperience if their YOE is less than or equal to 10 AND Age is greater than 35.
 
             //TODO: Add an employee to the end of the list without using employees.Add()
+            foreach(var name in nameStartCOrS.OrderBy(name => name.FirstName))
+            {
+                Console.WriteLine(name.FullName);
+            }
+            var ageOver26 = employees.Where(employeeAge => employeeAge.Age > 26);
+            foreach (var age in ageOver26.OrderBy(employeeAge => employeeAge.Age).ThenBy(employeeAge => employeeAge.FirstName))
+            {
+                Console.WriteLine(age.FullName);
+                Console.WriteLine(age.Age);
+            }
+            var expOver10AgeOver35 = employees.Where(employeeYOE => employeeYOE.YearsOfExperience <= 10 && employeeYOE.Age > 35);
+            Console.WriteLine($"Sum of employees experience with at most 10 years exp who are over age 35 = {expOver10AgeOver35.Sum(sum => sum.YearsOfExperience)}");
+            Console.WriteLine($"Average of employees experience with at most 10 years exp who are over age 35 = {expOver10AgeOver35.Average(average => average.YearsOfExperience)}");
+
+            employees = employees.Append(new Employee("Star", "Schweitzer", 25, 5)).ToList();
 
 
-            Console.WriteLine();
-
-            Console.ReadLine();
+            foreach(var employee in employees)
+            {
+                Console.WriteLine(employee.FullName);
+            }
         }
 
         #region CreateEmployeesMethod
